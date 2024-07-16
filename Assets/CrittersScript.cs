@@ -241,8 +241,9 @@ public class CrittersScript : ModuleScript
 
         foreach (KMSelectable Press in RequiredPresses)
         {
+            while (_isAnimationRunning)
+                yield return new WaitForSeconds(0.1f);
             Press.OnInteract();
-            yield return new WaitForSeconds(0.15f);
         }
         _isModuleClearing = false;
     }
@@ -259,8 +260,9 @@ public class CrittersScript : ModuleScript
 
         foreach (KMSelectable Press in RequiredPresses)
         {
+            while (_isAnimationRunning)
+                yield return new WaitForSeconds(0.1f);
             Press.OnInteract();
-            yield return new WaitForSeconds(0.15f);
         }
         _isModuleClearing = false;
     }
@@ -355,7 +357,7 @@ public class CrittersScript : ModuleScript
     // TP Support ?
 
 #pragma warning disable 414
-    private string TwitchHelpMessage = "'!{0} (a-h)(1-8)' to toggle the state of the tile at that position. '!{0} submit', '!{0} s', or '!{0} sub' to submit the current state. '!{0} reset' or '!{0} r' to revert the module to its initial state. '!{0} c', '!{0} clr', or '!{0} clear' to clear the grid. All commands are chainable using spaces. Finally, '!{0} <64 binary digits>' to submit the grid, with 0 being black and 1 being coloured.";
+    private string TwitchHelpMessage = "'!{0} (a-h)(1-8)' to toggle the state of the tile at that position. '!{0} submit', '!{0} s', or '!{0} sub' to submit the current state. '!{0} reset' or '!{0} r' to revert the module to its initial state. '!{0} c', '!{0} clr', or '!{0} clear' to clear the grid. All commands are chainable using spaces. Finally, '!{0} <64 binary digits>' to set the grid, with 0 being black and 1 being coloured.";
 #pragma warning restore 414
 
     IEnumerator ProcessTwitchCommand(string input)
@@ -370,14 +372,10 @@ public class CrittersScript : ModuleScript
             for (int i = 0; i < matches.Count; i++)
             {
                 while (_isAnimationRunning)
-                    yield return null;
+                    yield return new WaitForSeconds(0.1f);
                 if (int.Parse(matches[i].Value) != _submissionGrid[i])
-                {
                     _Tiles[i].OnInteract();
-                    yield return new WaitForSeconds(0.15f);
-                }
             }
-            SubmitButton.OnInteract();
         }
         else
         {
@@ -429,11 +427,10 @@ public class CrittersScript : ModuleScript
                 {
                     yield return null;
                     while (_isModuleClearing)
-                        yield return null;
+                        yield return new WaitForSeconds(0.1f);
                     while (_isAnimationRunning)
-                        yield return null;
+                        yield return new WaitForSeconds(0.1f);
                     Tile.OnInteract();
-                    yield return new WaitForSeconds(0.15f);
                 }
         }
     }
@@ -451,8 +448,9 @@ public class CrittersScript : ModuleScript
         foreach (KMSelectable Tile in TilesToPress)
         {
             yield return null;
+            while (_isAnimationRunning)
+                yield return new WaitForSeconds(0.1f);
             Tile.OnInteract();
-            yield return new WaitForSeconds(0.15f);
         }
 
         Solve("This module was forcefully solved.");
